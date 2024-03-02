@@ -1,8 +1,19 @@
 import { createServer } from "http";
 import url from "url";
-import { getCollections } from "./model.js";
-// it is a good practice to always allow to
-// run on a different port
+import { values, prop, groupBy, compose, filter, map } from "ramda";
+
+const groupedBy = (pr) => (xs) => values(groupBy(prop(pr), xs));
+const toViewModel = ({ results }) =>
+  compose(
+    map(groupedBy("collectionName")),
+    groupedBy("collectionCensoredName"),
+    filter((x) => x.trackExplicitness == "notExplicit"),
+  )(results);
+
+const getCollections = (query) =>
+  fetch("https://itunes.apple.com/search?term=" + query)
+    .then((x) => x.json())
+    .then(toViewModel);
 
 createServer(async (req, res) => {
   const {
