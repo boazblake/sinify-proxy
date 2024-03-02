@@ -19,6 +19,7 @@ createServer(async (req, res) => {
   const {
     query: { term },
   } = url.parse(req.url, true);
+  console.log("term", term);
   const results = await getCollections(term.split(" ").join("+"));
   return res.end(JSON.stringify(results));
 }).listen(2000);
