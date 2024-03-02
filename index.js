@@ -1,21 +1,20 @@
-import { values, prop, groupBy, compose, filter, map } from "ramda";
+import { createServer } from "http";
+import url from "url";
+import { getCollections } from "./model";
+// it is a good practice to always allow to
+// run on a different port
 
-const groupedBy = (pr) => (xs) => values(groupBy(prop(pr), xs));
-const toViewModel = ({ results }) =>
-  compose(
-    map(groupedBy("collectionName")),
-    groupedBy("collectionCensoredName"),
-    filter((x) => x.trackExplicitness == "notExplicit"),
-  )(results);
+createServer(async (req, res) => {
+  const {
+    query: { term },
+  } = url.parse(req.url, true);
+  const results = await getCollections(term.split(" ").join("+"));
+  return res.end(JSON.stringify(results));
+}).listen(3000);
 
-const getCollections = (query) =>
-  fetch("https://itunes.apple.com/search?" + query)
-    .then((x) => x.json())
-    .then(toViewModel);
-
-export default async function (app) {
-  app.get("/music", async (r) => {
-    const results = await getCollections(r.query);
-    r.end(JSON.stringify(results));
-  });
-}
+// export default async function (app) {
+//   app.get("/music", async (r) => {
+//     const results = await getCollections(r.query);
+//     r.json(results);
+//   });
+// }
