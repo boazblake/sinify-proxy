@@ -1,6 +1,6 @@
-import { createServer } from "http";
-import url from "url";
-import { values, prop, groupBy, compose, filter, map } from "ramda";
+const { createServer } = require("http");
+const { compose, filter, groupBy, map, prop, values } = require("ramda");
+const url = require("url");
 
 const groupedBy = (pr) => (xs) => values(groupBy(prop(pr), xs));
 const toViewModel = ({ results }) =>
