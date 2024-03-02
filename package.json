@@ -1,6 +1,5 @@
 {
   "name": "sinify-proxy",
-  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"No test specified\" && exit 1",
