@@ -15,7 +15,7 @@ const getCollections = (query) =>
     .then((x) => x.json())
     .then(toViewModel);
 
-export default createServer(async (req, res) => {
+createServer(async (req, res) => {
   const {
     query: { term },
   } = url.parse(req.url, true);
