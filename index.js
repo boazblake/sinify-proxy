@@ -21,7 +21,7 @@ createServer(async (req, res) => {
   } = url.parse(req.url, true);
   const results = await getCollections(term.split(" ").join("+"));
   return res.end(JSON.stringify(results));
-}).listen(30);
+}).listen(3000);
 
 // export default async function (app) {
 //   app.get("/music", async (r) => {
