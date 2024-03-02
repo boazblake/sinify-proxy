@@ -1,6 +1,6 @@
 import { createServer } from "http";
 import url from "url";
-import { getCollections } from "./model";
+import { getCollections } from "./model.js";
 // it is a good practice to always allow to
 // run on a different port
 
