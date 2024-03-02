@@ -1,7 +1,12 @@
 const { createServer } = require("http");
 const { compose, filter, groupBy, map, prop, values } = require("ramda");
 const url = require("url");
-
+const headers = {
+  "Access-Control-Allow-Origin": "*" /* @dev First, read about security */,
+  "Access-Control-Allow-Methods": "OPTIONS, GET",
+  "Access-Control-Max-Age": 2592000, // 30 days
+  /** add other headers as per requirement */
+};
 const groupedBy = (pr) => (xs) => values(groupBy(prop(pr), xs));
 const toViewModel = ({ results }) =>
   compose(
@@ -19,14 +24,7 @@ createServer(async (req, res) => {
   const {
     query: { term },
   } = url.parse(req.url, true);
-  console.log("term", term);
   const results = await getCollections(term.split(" ").join("+"));
+  res.writeHead(200, headers);
   return res.end(JSON.stringify(results));
 }).listen(2000);
-
-// export default async function (app) {
-//   app.get("/music", async (r) => {
-//     const results = await getCollections(r.query);
-//     r.json(results);
-//   });
-// }
